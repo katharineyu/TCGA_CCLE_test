@@ -6,6 +6,7 @@ library(plotly)
 library(RColorBrewer)
 library(shinycssloaders)
 library(shinythemes)
+library(data.table)
 
 # Define UI ----
 ui <- fluidPage(
@@ -86,7 +87,7 @@ server <- function(input, output) {
     output$heat <- renderPlotly({
       correlation = data.matrix(readRDS("data/summary_heatmap.rds"))
       nms <- colnames(correlation)
-      plot_ly(width = (0.8*as.numeric(input$dimension[1])), height = .7*as.numeric(input$dimension[1]), colors = inferno(50), x = nms, y = nms, z = correlation, 
+      plot_ly(width = (0.6*as.numeric(input$dimension[1])), height = .5*as.numeric(input$dimension[1]), colors = inferno(50), x = nms, y = nms, z = correlation, 
               key = correlation, type = "heatmap", source = "heatplot") %>%
         layout(xaxis = list(title = "Cell Lines"),
                yaxis = list(title = "Primary Tumors"))
