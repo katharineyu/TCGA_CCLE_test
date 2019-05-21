@@ -34,9 +34,10 @@ ui <- fluidPage(
                                     choices = list("BLCA", "BRCA", "CHOL", "COADREAD", "DLBC", "ESCA", "GBM", "HNSC", "KIRC", "LAML", "LGG", "LIHC", "LUAD", "LUSC", "MESO", "OV", "PAAD", "PRAD", "SKCM", "STAD", "THCA", "UCEC"))
                       ),
                       mainPanel(
+                        
                         tags$h4(textOutput("selected_var"), align = "center"),
                         downloadButton("downloadData_cancer", "Download cell line and primary tumor correlations"),
-                        plotOutput("celllinePlot1", height = "100%"),
+                        plotOutput("celllinePlot1", width = "100%", height = "100%"),
                         tags$h4(textOutput("selected_var2"), align = "center"),
                         plotOutput("primarytissuePlot1", height = "100%"),
                         tags$h4(textOutput("selected_var3"), align = "center"),
@@ -50,6 +51,7 @@ ui <- fluidPage(
                         tags$style(type="text/css",
                                    ".shiny-output-error { visibility: hidden; }",
                                    ".shiny-output-error:before { visibility: hidden; }")
+                  
                       )
              ),
              
@@ -84,7 +86,7 @@ server <- function(input, output) {
     output$heat <- renderPlotly({
       correlation = data.matrix(readRDS("data/summary_heatmap.rds"))
       nms <- colnames(correlation)
-      plot_ly(width = (0.6*as.numeric(input$dimension[1])), height = .65*as.numeric(input$dimension[2]), colors = inferno(50), x = nms, y = nms, z = correlation, 
+      plot_ly(width = (0.8*as.numeric(input$dimension[1])), height = .7*as.numeric(input$dimension[1]), colors = inferno(50), x = nms, y = nms, z = correlation, 
               key = correlation, type = "heatmap", source = "heatplot") %>%
         layout(xaxis = list(title = "Cell Lines"),
                yaxis = list(title = "Primary Tumors"))
@@ -92,42 +94,42 @@ server <- function(input, output) {
   })
   
   output$celllinePlot1 <- renderImage({
-    filename <- normalizePath(file.path('www', paste(input$cancer, "_specific_cell_lines.pdf", sep='')))
-    list(src = filename)
+    filename <- normalizePath(file.path('www', paste(input$cancer, "_specific_cell_lines.png", sep='')))
+    list(src = filename, width = 0.5*as.numeric(input$dimension[1]))
   }, deleteFile = FALSE)
   
   output$primarytissuePlot1 <- renderImage({
-    filename <- normalizePath(file.path('www', paste(input$cancer, "_by_primary_sites.pdf", sep='')))
-    list(src = filename)
+    filename <- normalizePath(file.path('www', paste(input$cancer, "_by_primary_sites.png", sep='')))
+    list(src = filename, width = 0.5*as.numeric(input$dimension[1]))
   }, deleteFile = FALSE)
   
   output$heatmapPlot1 <- renderImage({
-    filename <- normalizePath(file.path('www', paste(input$cancer, "_heatmap_TCGA_CCLE.pdf", sep='')))
-    list(src = filename)
+    filename <- normalizePath(file.path('www', paste(input$cancer, "_heatmap_TCGA_CCLE.png", sep='')))
+    list(src = filename, width = 0.5*as.numeric(input$dimension[1]))
   }, deleteFile = FALSE)
   
   output$Subtype1 <- renderImage({
     subtype = unique(na.omit(readRDS(paste("data/subtypes_", input$cancer, ".rds", sep = ""))$published.subtype))[1]
-    filename <- normalizePath(file.path('www', paste(input$cancer,"_specific_cell_lines_", subtype, ".pdf", sep='')))
-    list(src = filename)
+    filename <- normalizePath(file.path('www', paste(input$cancer,"_specific_cell_lines_", subtype, ".png", sep='')))
+    list(src = filename, width = 0.5*as.numeric(input$dimension[1]))
   }, deleteFile = FALSE)
 
   output$Subtype2 <- renderImage({
     subtype = unique(na.omit(readRDS(paste("data/subtypes_", input$cancer, ".rds", sep = ""))$published.subtype))[2]
-    filename <- normalizePath(file.path('www', paste(input$cancer,"_specific_cell_lines_", subtype, ".pdf", sep='')))
-    list(src = filename)
+    filename <- normalizePath(file.path('www', paste(input$cancer,"_specific_cell_lines_", subtype, ".png", sep='')))
+    list(src = filename, width = 0.5*as.numeric(input$dimension[1]))
   }, deleteFile = FALSE)
   
   output$Subtype3 <- renderImage({
     subtype = unique(na.omit(readRDS(paste("data/subtypes_", input$cancer, ".rds", sep = ""))$published.subtype))[3]
-    filename <- normalizePath(file.path('www', paste(input$cancer,"_specific_cell_lines_", subtype, ".pdf", sep='')))
-    list(src = filename)
+    filename <- normalizePath(file.path('www', paste(input$cancer,"_specific_cell_lines_", subtype, ".png", sep='')))
+    list(src = filename, width = 0.5*as.numeric(input$dimension[1]))
   }, deleteFile = FALSE)
   
   output$Subtype4 <- renderImage({
     subtype = unique(na.omit(readRDS(paste("data/subtypes_", input$cancer, ".rds", sep = ""))$published.subtype))[4]
-    filename <- normalizePath(file.path('www', paste(input$cancer,"_specific_cell_lines_", subtype, ".pdf", sep='')))
-    list(src = filename)
+    filename <- normalizePath(file.path('www', paste(input$cancer,"_specific_cell_lines_", subtype, ".png", sep='')))
+    list(src = filename, width = 0.5*as.numeric(input$dimension[1]))
   }, deleteFile = FALSE)
   
   output$selected_var <- renderText({ 
