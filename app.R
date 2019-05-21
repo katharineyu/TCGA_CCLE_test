@@ -25,7 +25,7 @@ ui <- fluidPage(
              
              tabPanel("Summary", 
                       tags$h2("Heatmap showing the median correlations between cell lines and primary tumor samples across all 22 tumor types"),
-                      plotlyOutput("heat", width = "auto") 
+                      withSpinner(plotlyOutput("heat", width = "auto"), type = 5)
              ),
              
              tabPanel("Explore the data", 
